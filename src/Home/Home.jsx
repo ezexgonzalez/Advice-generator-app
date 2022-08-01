@@ -9,6 +9,16 @@ const Home = () => {
     const [frase, setFrase] = useState({});
     const [loading, setLoading] = useState(false);
 
+    const randomAdvice = async ()  =>{
+        setLoading(true);
+        const resp = await fetch("https://api.adviceslip.com/advice",{ cache: "no-cache" });
+        if(resp){
+            const data = await resp.json();
+            setLoading(false);
+            setFrase(data.slip);
+        }
+
+    }
 
     useEffect(()=>{
         axios.get("https://api.adviceslip.com/advice")
@@ -17,20 +27,11 @@ const Home = () => {
         })
     },[]);   
 
-    const randomAdvice = () =>{
-        setLoading(true);
-
-        axios.get("https://api.adviceslip.com/advice")
-        .then(data =>{
-            setFrase(data.data.slip);
-            setLoading(false);
-        });
-    }
-
 
     if(loading){
         return(
             <main className={s.container}>
+                <h1 style={{ opacity: 0, width: 0 }}>Advice Generator</h1>
                  <div className={s.card}>
                     <div className={s.flex}>
                         <div className={s.ldsRing}><div></div><div></div><div></div><div></div></div>
@@ -44,6 +45,7 @@ const Home = () => {
     }else{
         return (
             <main className={s.container}>
+                <h1 style={{ opacity: 0, width: 0 }}>Advice Generator</h1>
                  <div className={s.card}>
                      <span className={s.texto}>ADVICE #{frase.id && frase.id}</span>
                      <div className={s.textContainer}>
